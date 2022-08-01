@@ -1,4 +1,5 @@
 from excel_operate import ExcelOperate
+from excel_operate import SheetCopy
 
 excel = ExcelOperate('tests/示例.xlsx')
 excel.ws['C15'].value = '测试通过！！'
