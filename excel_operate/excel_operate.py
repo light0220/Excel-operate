@@ -4,6 +4,10 @@ from openpyxl.utils import get_column_letter
 
 class ExcelOperate:
     def __init__(self,file_path=None,sheet_name=None):
+        '''
+        :param file_path: 指定目标Excel文件目录，不指定的话则打开新工作薄
+        :param sheet_name: 指定目标工作表名称，不指定的话打开当前激活工作表，如果参数file_path未指定的话，请不要给本参数赋值
+        '''
         self.file_path = file_path
         if file_path == None:
             self.wb = Workbook()
