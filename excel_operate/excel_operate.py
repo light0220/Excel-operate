@@ -3,10 +3,10 @@ from copy import copy
 from openpyxl.utils import get_column_letter
 
 class ExcelOperate:
-    def __init__(self,file_path=None,sheet_name=None):
+    def __init__(self,file_path:str=None,sheet_name:str=None):
         '''
-        :param file_path: 指定目标Excel文件目录，不指定的话则打开新工作薄
-        :param sheet_name: 指定目标工作表名称，不指定的话打开当前激活工作表，如果参数file_path未指定的话，请不要给本参数赋值
+        file_path: 指定目标Excel文件路径，不指定的话则默认打开新建工作薄
+        sheet_name: 指定目标工作表名称，不指定的话默认为当前激活工作表，如果参数file_path未指定的话，请不要给本参数赋值
         '''
         self.file_path = file_path
         if file_path == None:
@@ -19,7 +19,12 @@ class ExcelOperate:
         else:
             self.ws = self.wb[sheet_name]
 
-    def insert_rows(self,idx,amount=1,height='before'): # 定义插入行模块,参数idx为指定插入行的位置，参数amount为指定插入的行数，不指定的情况下默认插入1行，参数height为指定插入行的行高，默认'before'为继承前一行的行高，指定数字可以设置对应的行高，指定None为自动行高。
+    def insert_rows(self,idx:int,amount:int=1,height:float='before'): # 定义插入行模块
+        '''
+        idx: 参数idx为指定插入行的起始位置
+        amount: 参数amount为指定插入的行数，不指定的情况下默认插入1行
+        height: 参数height为指定插入行的行高，不指定的情况下默认继承前一行的行高，指定数字可以设置对应的行高，指定None为自动行高
+        '''
         row_height_list = [] # 定义空列表用以接收从插入行开始到最大行的所有行高数据
         for i in range(idx,self.ws.max_row+1):
             row_height_list.append(self.ws.row_dimensions[i].height)
@@ -73,7 +78,12 @@ class ExcelOperate:
         for i,h in zip(range(idx+amount,self.ws.max_row+1),row_height_list):
             self.ws.row_dimensions[i].height = h
 
-    def insert_cols(self,idx,amount=1,width='before'): # 定义插入列模块,参数idx为指定插入列的位置，参数amount为指定插入的列数，不指定的情况下默认插入1列，参数width为指定插入列的列宽，默认'before'为继承前一列的列宽，指定数字可以设置对应的列宽。
+    def insert_cols(self,idx:int,amount:int=1,width:float='before'): # 定义插入列模块
+        '''
+        idx: 参数idx为指定插入列起始的位置
+        amount: 参数amount为指定插入的列数，不指定的情况下默认插入1列
+        width: 参数width为指定插入列的列宽，不指定的情况下默认继承前一列的列宽，指定数字可以设置对应的列宽
+        '''
         col_width_list = [] # 定义空列表用以接收从插入列开始到最大列的所有列宽数据
         for i in range(idx,self.ws.max_column+1):
             col_width_list.append(self.ws.column_dimensions[get_column_letter(i)].width)
@@ -127,7 +137,11 @@ class ExcelOperate:
         for i,w in zip(range(idx+amount,self.ws.max_column+1),col_width_list):
             self.ws.column_dimensions[get_column_letter(i)].width = w
 
-    def delete_rows(self,idx,amount=1): # 定义删除行模块,参数idx为指定删除行的起始位置，参数amount为指定删除的行数，不指定的情况下默认删除1行。
+    def delete_rows(self,idx:int,amount:int=1): # 定义删除行模块
+        '''
+        idx: 参数idx为指定删除行的起始位置
+        amount: 参数amount为指定删除的行数，不指定的情况下默认删除1行
+        '''
         row_height_list = [] # 定义空列表用以接收从删除行结尾开始到最大行的所有行高数据
         for i in range(idx+amount,self.ws.max_row+1):
             row_height_list.append(self.ws.row_dimensions[i].height)
@@ -174,7 +188,11 @@ class ExcelOperate:
         for i,h in zip(range(idx,self.ws.max_row+1),row_height_list): # 恢复删除行后的行高
             self.ws.row_dimensions[i].height = h
 
-    def delete_cols(self,idx,amount=1): # 定义删除列模块,参数idx为指定删除列的位置，参数amount为指定删除的列数，不指定的情况下默认删除1列。
+    def delete_cols(self,idx:int,amount:int=1): # 定义删除列模块
+        '''
+        idx: 参数idx为指定删除列的起始位置
+        amount: 参数amount为指定删除的列数，不指定的情况下默认删除1列
+        '''
         col_width_list = [] # 定义空列表用以接收从删除列结尾开始到最大列的所有列宽数据
         for i in range(idx+amount,self.ws.max_column+1):
             col_width_list.append(self.ws.column_dimensions[get_column_letter(i)].width)
@@ -222,7 +240,10 @@ class ExcelOperate:
             self.ws.column_dimensions[get_column_letter(i)].width = w
 
 
-    def save(self,file_path=None):
+    def save(self,file_path:str=None):
+        '''
+        file_path: 指定文件保存路径，如果对象为已有工作薄的话，此参数不指定则默认为覆盖原文件保存，如果对象为新建工作薄的话此参数必须指定，否则会报错
+        '''
         if file_path == None:
             self.wb.save(self.file_path)
         else:

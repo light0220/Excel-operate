@@ -3,7 +3,13 @@ from copy import copy
 from openpyxl.utils import get_column_letter
 
 class SheetCopy:
-    def __init__(self,src_file_path,tag_file_path=None,sheet_name=None,column_adjust=0) -> None:
+    def __init__(self,src_file_path:str,tag_file_path:str=None,sheet_name:str=None,column_adjust:float=0) -> None:
+        '''
+        src_file_path: 此参数为源Excel文件路径
+        tag_file_path: 此参数为目标Excel文件路径，不指定的情况下默认新建工作薄
+        sheet_name: 此参数为被复制的工作表名称，不指定的情况下默认为源工作表中的当前激活工作表
+        column_adjust: 此参数为列宽修正系数，作用为修正列宽误差
+        '''
         self.src_file = ExcelOperate(src_file_path,sheet_name)
         if tag_file_path == None:
             self.tag_file = ExcelOperate()
