@@ -24,7 +24,7 @@
 + 对象实例化方法：
   + 通过语句 `excel = ExcelOperate(file_path=None,sheet_name=None)`，获得一个名为 `excel`的对象。
     + 参数 `file_path`*为文件路径，指定后打开文件路径对应的Excel文件（相当于* `openpyxl`*中的* `load_workbook`*方法）不指定则会新建一个空白Excel文件（相当于* `openpyxl`*中的* `Workbook`*类的实例化）；*
-    + *参数* `sheet_name`*为工作表名，指定后打开对应的工作表，不指定则打开当前激活的工作表（相当于工作薄对象的* `active`*方法）。*
+    + *参数* `sheet_name`*为工作表名，指定后打开对应的工作表(如果打开的工作薄中不存在指定名称的工作表则以指定的工作表为名创建一个工作表)，不指定则打开当前激活的工作表（相当于工作薄对象的* `active`*方法）。*
 + 插入或删除行（列）：
   + 插入行 `excel.insert_rows(idx,amount=1,height='before')`；
   + 删除行 `excel.delete_rows(idx,amount=1)`；
@@ -50,6 +50,8 @@
 
 ## 四、版本历史
 
++ V 1.0.3
+  + 优化代码逻辑，增加在ExcelOperate类的实例化中如果打开的Excel工作薄中没有sheet_name参数指定的工作表则会以sheet_name参数为名，创建一个工作薄。
 + V 1.0.2
   + 优化代码结构，增加函数参数注释。
 + V 1.0.1

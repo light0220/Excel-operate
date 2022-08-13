@@ -12,8 +12,7 @@ class SheetCopy:
         '''
         self.src_file = ExcelOperate(src_file_path,sheet_name)
         if tag_file_path == None:
-            self.tag_file = ExcelOperate()
-            self.tag_file.ws.title = self.src_file.ws.title
+            self.tag_file = ExcelOperate(sheet_name = self.src_file.ws.title)
         else:
             self.tag_file = ExcelOperate(tag_file_path)
             if self.src_file.ws.title not in self.tag_file.wb.sheetnames:
@@ -59,7 +58,7 @@ class SheetCopy:
 
 # 调试
 if __name__ == '__main__':
-    src_file_path = r'D:\codes\Python Projects\excel_operate_root\tests\示例.xlsx'
+    src_file_path = r'D:\codes\Python Projects\Excel-operate\tests\示例.xlsx'
     copyer = SheetCopy(src_file_path,r'D:\Desktop\1111.xlsx')
     tag_file = copyer.copy_sheet()
     tag_file.save(r'D:\Desktop\1111.xlsx')

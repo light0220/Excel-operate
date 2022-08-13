@@ -6,7 +6,7 @@ class ExcelOperate:
     def __init__(self,file_path:str=None,sheet_name:str=None):
         '''
         file_path: 指定目标Excel文件路径，不指定的话则默认打开新建工作薄
-        sheet_name: 指定目标工作表名称，不指定的话默认为当前激活工作表，如果参数file_path未指定的话，请不要给本参数赋值
+        sheet_name: 指定目标工作表名称，不指定的话默认为当前激活工作表，如果当前工作薄中不含有指定的工作表则会新建对应名称的工作表
         '''
         self.file_path = file_path
         if file_path == None:
@@ -17,7 +17,13 @@ class ExcelOperate:
         if sheet_name == None:
             self.ws = self.wb.active
         else:
-            self.ws = self.wb[sheet_name]
+            if file_path == None:
+                self.ws = self.wb.active
+                self.ws.title = sheet_name
+            else:
+                if sheet_name not in self.wb.sheetnames:
+                    self.wb.create_sheet(sheet_name)
+                self.ws = self.wb[sheet_name]
 
     def insert_rows(self,idx:int,amount:int=1,height:float='before'): # 定义插入行模块
         '''
@@ -251,7 +257,7 @@ class ExcelOperate:
 
 # 调试
 if __name__ == '__main__':
-    excel = ExcelOperate()
+    excel = ExcelOperate(sheet_name='测试工作表')
 
     excel.ws['C15'].value = '测试通过！！'
-    excel.wb.save('d:/desktop/111.xlsx')
+    excel.wb.save('d:/desktop/1111.xlsx')
