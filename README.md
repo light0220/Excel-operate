@@ -51,7 +51,7 @@
 ## 四、版本历史
 
 + V 1.0.3
-  + 优化代码逻辑，增加在ExcelOperate类的实例化中如果打开的Excel工作薄中没有sheet_name参数指定的工作表则会以sheet_name参数为名，创建一个工作薄。
+  + 优化代码逻辑，增加在ExcelOperate类的实例化中如果打开的Excel工作薄中没有sheet_name参数指定的工作表则会以sheet_name参数为名，创建一个工作表。
 + V 1.0.2
   + 优化代码结构，增加函数参数注释。
 + V 1.0.1
