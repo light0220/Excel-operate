@@ -1,5 +1,6 @@
 from excel_operate import ExcelOperate
 from excel_operate import SheetCopy
+from excel_operate import SheetComparison
 
 excel = ExcelOperate('tests/示例.xlsx')
 excel.ws['C15'].value = '测试通过！！'
@@ -15,3 +16,6 @@ excel.save('D:/desktop/1111.xlsx')
 stcper = SheetCopy('tests/示例.xlsx','D:/desktop/1111.xlsx')
 tag_file = stcper.copy_sheet()
 tag_file.save('D:/desktop/1111.xlsx')
+
+src_excel = ExcelOperate()
+cmp_excel = SheetComparison()
