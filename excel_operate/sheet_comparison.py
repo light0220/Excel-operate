@@ -1,5 +1,6 @@
 from excel_operate import ExcelOperate
 from sheet_copy import SheetCopy
+from list_operate import *
 
 
 class SheetComparison:
