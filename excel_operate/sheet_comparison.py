@@ -33,6 +33,18 @@ class SheetComparison:
         self.src_key_col = src_key_col
         self.cmp_key_col = cmp_key_col
 
+    def compare(self):
+        '''===================================\n
+        对比工作表：将原工作表及目标工作表的表头行和关键列设置好之后即可使用此方法对比工作表，并生成对比报告。
+        '''
+        if self.src_title_row != self.cmp_title_row:  # 如果目标工作表的标题行与原工作表标题行不在同一行
+            if self.src_title_row > self.cmp_title_row:
+                self.cmp_excel.insert_rows(
+                    0, self.src_title_row-self.cmp_title_row)
+            else:
+                self.src_excel.insert_rows(
+                    0, self.cmp_title_row-self.src_title_row)
+
 
 # 调试
 if __name__ == '__main__':

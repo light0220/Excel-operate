@@ -33,13 +33,17 @@ class SheetCopy:
         self.column_adjust = column_adjust
 
     # 定义工作表复制模块
-    def copy_sheet(self):
+    def copy_sheet(self, origin_row: int = 1, origin_col: int = 1):
         '''===================================\n
         复制工作表
+        origin_row: 设定目标工作表写入的起始行，默认从第1行开始写入，传入大于或等于1的整数则会从设定的行开始写入。
+        origin_col: 设定目标工作表写入的起始列，默认从第1列开始写入，传入大于或等于1的整数则会从设定的列开始写入。
         '''
         for row in self.src_file.ws:
             # 遍历源xlsx文件制定sheet中的所有单元格
             for cell in row:  # 复制数据
+                cell.row += origin_row - 1
+                cell.column += origin_col - 1
                 self.tag_file.ws[cell.coordinate].value = cell.value
                 if cell.has_style:  # 复制样式
                     self.tag_file.ws[cell.coordinate].font = copy(cell.font)
@@ -53,18 +57,17 @@ class SheetCopy:
                     self.tag_file.ws[cell.coordinate].alignment = copy(
                         cell.alignment)
 
-        wm = list(zip(self.src_file.ws.merged_cells))  # 开始处理合并单元格
-        if len(wm) > 0:  # 检测源xlsx中合并的单元格
-            for i in range(0, len(wm)):
-                cell2 = (str(wm[i]).replace(
-                    "(<MergedCellRange ", "").replace(">,)", ""))  # 获取合并单元格的范围
-                self.tag_file.ws.merge_cells(cell2)  # 合并单元格
+        merged_cells = self.src_file.ws.merged_cell_ranges  # 已合并的单元格列表
+        if len(merged_cells) > 0:  # 检测源xlsx中合并的单元格
+            for merged_cell in merged_cells:
+                self.tag_file.ws.merge_cells(start_row=merged_cell.min_row + origin_row - 1, end_row=merged_cell.max_row + origin_row - 1,
+                                             start_column=merged_cell.min_col + origin_col - 1, end_column=merged_cell.max_col + origin_col - 1)  # 合并单元格
         # 开始处理行高列宽
         for i in range(1, self.src_file.ws.max_row + 1):
-            self.tag_file.ws.row_dimensions[i].height = self.src_file.ws.row_dimensions[i].height
+            self.tag_file.ws.row_dimensions[i + origin_row - 1].height = self.src_file.ws.row_dimensions[i].height
         for i in range(1, self.src_file.ws.max_column + 1):
             self.tag_file.ws.column_dimensions[get_column_letter(
-                i)].width = self.src_file.ws.column_dimensions[get_column_letter(i)].width + self.column_adjust  # 修正列宽误差
+                i + origin_col - 1)].width = self.src_file.ws.column_dimensions[get_column_letter(i)].width + self.column_adjust  # 修正列宽误差
 
         return self.tag_file
 
@@ -72,6 +75,6 @@ class SheetCopy:
 # 调试
 if __name__ == '__main__':
     src_file_path = r'D:\codes\Python Projects\Excel-operate\tests\示例.xlsx'
-    copyer = SheetCopy(src_file_path, r'D:\Desktop\1111.xlsx')
-    tag_file = copyer.copy_sheet()
+    copyer = SheetCopy(src_file_path)
+    tag_file = copyer.copy_sheet(origin_col=5)
     tag_file.save(r'D:\Desktop\1111.xlsx')
