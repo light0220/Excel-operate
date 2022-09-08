@@ -5,7 +5,8 @@ from openpyxl.utils import get_column_letter
 
 class ExcelOperate:
     def __init__(self, file_path: str = None, sheet_name: str = None):
-        '''
+        '''===================================\n
+        实例化Excel对象
         file_path: 指定目标Excel文件路径，不指定的话则默认打开新建工作薄
         sheet_name: 指定目标工作表名称，不指定的话默认为当前激活工作表，如果当前工作薄中不含有指定的工作表则会新建对应名称的工作表
         '''
@@ -27,7 +28,8 @@ class ExcelOperate:
                 self.ws = self.wb[sheet_name]
 
     def insert_rows(self, idx: int, amount: int = 1, height: float = 'before'):  # 定义插入行模块
-        '''
+        '''===================================\n
+        插入行
         idx: 参数idx为指定插入行的起始位置
         amount: 参数amount为指定插入的行数，不指定的情况下默认插入1行
         height: 参数height为指定插入行的行高，不指定的情况下默认继承前一行的行高，指定数字可以设置对应的行高，指定None为自动行高
@@ -90,7 +92,8 @@ class ExcelOperate:
             self.ws.row_dimensions[i].height = h
 
     def insert_cols(self, idx: int, amount: int = 1, width: float = 'before'):  # 定义插入列模块
-        '''
+        '''===================================\n
+        插入列
         idx: 参数idx为指定插入列起始的位置
         amount: 参数amount为指定插入的列数，不指定的情况下默认插入1列
         width: 参数width为指定插入列的列宽，不指定的情况下默认继承前一列的列宽，指定数字可以设置对应的列宽
@@ -155,7 +158,8 @@ class ExcelOperate:
             self.ws.column_dimensions[get_column_letter(i)].width = w
 
     def delete_rows(self, idx: int, amount: int = 1):  # 定义删除行模块
-        '''
+        '''===================================\n
+        删除行
         idx: 参数idx为指定删除行的起始位置
         amount: 参数amount为指定删除的行数，不指定的情况下默认删除1行
         '''
@@ -209,7 +213,8 @@ class ExcelOperate:
             self.ws.row_dimensions[i].height = h
 
     def delete_cols(self, idx: int, amount: int = 1):  # 定义删除列模块
-        '''
+        '''===================================\n
+        删除列
         idx: 参数idx为指定删除列的起始位置
         amount: 参数amount为指定删除的列数，不指定的情况下默认删除1列
         '''
@@ -264,7 +269,8 @@ class ExcelOperate:
             self.ws.column_dimensions[get_column_letter(i)].width = w
 
     def save(self, file_path: str = None):
-        '''
+        '''===================================\n
+        指定路径，保存Excel文件
         file_path: 指定文件保存路径，如果对象为已有工作薄的话，此参数不指定则默认为覆盖原文件保存，如果对象为新建工作薄的话此参数必须指定，否则会报错
         '''
         if file_path == None:
@@ -278,4 +284,4 @@ if __name__ == '__main__':
     excel = ExcelOperate(sheet_name='测试工作表')
 
     excel.ws['C15'].value = '测试通过！！'
-    excel.wb.save('d:/desktop/1111.xlsx')
+    excel.save('d:/desktop/1111.xlsx')

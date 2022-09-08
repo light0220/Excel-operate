@@ -5,7 +5,7 @@ from openpyxl.utils import get_column_letter
 
 class SheetCopy:
     def __init__(self, src_file_path: str, tag_file_path: str = None, sheet_name: str = None, column_adjust: float = 0) -> None:
-        '''
+        '''===================================\n
         src_file_path: 此参数为源Excel文件路径
         tag_file_path: 此参数为目标Excel文件路径，不指定的情况下默认新建工作薄
         sheet_name: 此参数为被复制的工作表名称，不指定的情况下默认为源工作表中的当前激活工作表
@@ -34,6 +34,9 @@ class SheetCopy:
 
     # 定义工作表复制模块
     def copy_sheet(self):
+        '''===================================\n
+        复制工作表
+        '''
         for row in self.src_file.ws:
             # 遍历源xlsx文件制定sheet中的所有单元格
             for cell in row:  # 复制数据

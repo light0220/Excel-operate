@@ -7,7 +7,7 @@
 
 
 def duplicate_to_only(l: list, remove=False):
-    '''
+    '''===================================\n
     传入一个列表，去除列表中的重复项
     l: 目标列表
     remove: 默认参数False将第二个及之后重复的项目重命名为name(1),name(2)...的格式，传入True则直接删除列表中第二次及以后出现的所有重复项。
@@ -32,7 +32,7 @@ def duplicate_to_only(l: list, remove=False):
 
 
 def is_insert(srcl: list, tagl: list):
-    '''
+    '''===================================\n
     传入两个列表，判断目标列表是否为原列表插入元素所得。如果判断为是则返回一个以插入位置索引为键，该索引位置插入的元素个数为值的一个字典；否则返回None。
     srcl: 原列表
     tagl: 目标列表
@@ -54,7 +54,7 @@ def is_insert(srcl: list, tagl: list):
 
 
 def is_appand(srcl: list, tagl: list):
-    '''
+    '''===================================\n
     传入两个列表，判断目标列表是否为原列表后添加元素所得。如果判断为是则返回添加的元素个数；否则返回None。
     srcl: 原列表
     tagl: 目标列表
@@ -66,7 +66,7 @@ def is_appand(srcl: list, tagl: list):
 
 
 def is_delete(srcl: list, tagl: list):
-    '''
+    '''===================================\n
     传入两个列表，判断目标列表是否为原列表删除元素所得。如果判断为是则返回一个以删除位置索引为键，该索引位置删除的元素个数为值的一个字典；否则返回None。
     srcl: 原列表
     tagl: 目标列表
