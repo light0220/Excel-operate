@@ -64,7 +64,8 @@ class SheetCopy:
                                              start_column=merged_cell.min_col + origin_col - 1, end_column=merged_cell.max_col + origin_col - 1)  # 合并单元格
         # 开始处理行高列宽
         for i in range(1, self.src_file.ws.max_row + 1):
-            self.tag_file.ws.row_dimensions[i + origin_row - 1].height = self.src_file.ws.row_dimensions[i].height
+            self.tag_file.ws.row_dimensions[i + origin_row -
+                                            1].height = self.src_file.ws.row_dimensions[i].height
         for i in range(1, self.src_file.ws.max_column + 1):
             self.tag_file.ws.column_dimensions[get_column_letter(
                 i + origin_col - 1)].width = self.src_file.ws.column_dimensions[get_column_letter(i)].width + self.column_adjust  # 修正列宽误差
