@@ -8,6 +8,7 @@
 from excel_operate import ExcelOperate
 from sheet_copy import SheetCopy
 from list_operate import *
+from openpyxl.utils import get_column_letter
 
 
 class SheetComparison:
@@ -66,11 +67,16 @@ class SheetComparison:
                     0, self.cmp_key_col-self.src_key_col)
                 self.src_key_col = self.cmp_key_col
 
-        # 如果目标工作表的头行与原工作表头行不相同
-        if self.src_excel.ws[self.src_title_row] != self.cmp_excel.ws[self.cmp_title_row]:
+        # 如果目标工作表的表头行与原工作表的表头行不相同
+        src_title_list = [i.value for i in self.src_excel.ws[self.src_title_row]]
+        cmp_title_list = [i.value for i in self.cmp_excel.ws[self.cmp_title_row]]
+        if src_title_list != cmp_title_list:
             pass
 
-        #
+        # 如果目标工作表的关键列与原工作表的关键列不相同
+        src_key_list = [i.value for idx,i in enumerate(self.src_excel.ws[get_column_letter(self.src_key_col)],1) if idx>self.src_title_row]
+        if self.src_excel.ws[get_column_letter(self.src_key_col)] != self.cmp_excel.ws[get_column_letter(self.cmp_key_col)]:
+            pass
 
 
 # 调试
