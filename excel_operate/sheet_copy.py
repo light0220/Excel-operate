@@ -1,3 +1,10 @@
+# -*- encoding: utf-8 -*-
+'''
+@File    :   sheet_copy.py
+@Author  :   北极星光 
+@Contact :   light22@126.com
+'''
+
 from excel_operate import ExcelOperate
 from copy import copy
 from openpyxl.utils import get_column_letter

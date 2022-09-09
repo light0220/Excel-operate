@@ -1,3 +1,10 @@
+# -*- encoding: utf-8 -*-
+'''
+@File    :   sheet_comparison.py
+@Author  :   北极星光 
+@Contact :   light22@126.com
+'''
+
 from excel_operate import ExcelOperate
 from sheet_copy import SheetCopy
 from list_operate import *
@@ -37,13 +44,33 @@ class SheetComparison:
         '''===================================\n
         对比工作表：将原工作表及目标工作表的表头行和关键列设置好之后即可使用此方法对比工作表，并生成对比报告。
         '''
-        if self.src_title_row != self.cmp_title_row:  # 如果目标工作表的标题行与原工作表标题行不在同一行
+        # 如果目标工作表的表头行与原工作表的表头行不在同一行
+        if self.src_title_row != self.cmp_title_row:
             if self.src_title_row > self.cmp_title_row:
                 self.cmp_excel.insert_rows(
                     0, self.src_title_row-self.cmp_title_row)
+                self.cmp_title_row = self.src_title_row
             else:
                 self.src_excel.insert_rows(
                     0, self.cmp_title_row-self.src_title_row)
+                self.src_title_row = self.cmp_title_row
+
+        # 如果目标工作表的关键列与原工作表的关键列不在同一列
+        if self.src_key_col != self.cmp_key_col:
+            if self.src_key_col > self.cmp_key_col:
+                self.cmp_excel.insert_rows(
+                    0, self.src_key_col-self.cmp_key_col)
+                self.cmp_key_col = self.src_key_col
+            else:
+                self.src_excel.insert_rows(
+                    0, self.cmp_key_col-self.src_key_col)
+                self.src_key_col = self.cmp_key_col
+
+        # 如果目标工作表的头行与原工作表头行不相同
+        if self.src_excel.ws[self.src_title_row] != self.cmp_excel.ws[self.cmp_title_row]:
+            pass
+
+        #
 
 
 # 调试
@@ -53,4 +80,4 @@ if __name__ == '__main__':
     report_path = 'D:/Desktop/对比报告.xlsx'
     cmper = SheetComparison(src_excel, cmp_excel, report_path)
     cmper.set_title_row(2, 2)
-    cmper.set_key_col()
+    cmper.set_key_col(2, 2)
