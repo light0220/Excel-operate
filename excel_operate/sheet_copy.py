@@ -69,7 +69,7 @@ class SheetCopy:
                     tag_file.ws[cell.coordinate].alignment = copy(
                         cell.alignment)
 
-        merged_cells = src_file.ws.merged_cell_ranges  # 已合并的单元格列表
+        merged_cells = src_file.ws.merged_cells.ranges  # 已合并的单元格列表
         if len(merged_cells) > 0:  # 检测源xlsx中合并的单元格
             for merged_cell in merged_cells:
                 tag_file.ws.merge_cells(start_row=merged_cell.min_row + origin_row - 1, end_row=merged_cell.max_row + origin_row - 1,
