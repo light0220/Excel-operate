@@ -6,10 +6,10 @@
 '''
 
 from excel_operate import ExcelOperate
-from sheet_copy import SheetCopy
-from list_operate import *
+from excel_operate import SheetCopy
+from excel_operate.list_operate import *
 from openpyxl.utils import get_column_letter
-from openpyxl.styles import PatternFill, Alignment, Side, Border, Font
+from openpyxl.styles import Alignment, Side, Border, Font
 
 
 class SheetComparison:
@@ -21,7 +21,6 @@ class SheetComparison:
         '''
         self.src_excel = src_excel
         self.cmp_excel = cmp_excel
-        self.report_path = report_path
 
     def set_title_row(self, src_title_row: int, cmp_title_row: int):
         '''===================================\n
