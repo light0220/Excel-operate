@@ -9,6 +9,7 @@ from excel_operate import ExcelOperate
 from sheet_copy import SheetCopy
 from list_operate import *
 from openpyxl.utils import get_column_letter
+from openpyxl.styles import PatternFill, Alignment, Side, Border, Font
 
 
 class SheetComparison:
@@ -40,6 +41,19 @@ class SheetComparison:
         '''
         self.src_key_col = src_key_col
         self.cmp_key_col = cmp_key_col
+
+    def font_color(self, cell, style):
+        '''===================================\n
+        此方法为目标单元格设置样式
+        cell: 目标单元格，请传入单元格对象
+        style: 目标单元格将要设置成的样式，只支持'zeng','shan'和'gai'这三个参数。
+        '''
+        if style == 'zeng':
+            cell.font = Font(color='0000FF')
+        if style == 'shan':
+            cell.font = Font(color='FF0000',strike=True)
+        if style == 'gai':
+            cell.font = Font(color='FF00FF')
 
     def compare(self):
         '''===================================\n
@@ -142,21 +156,33 @@ class SheetComparison:
             # 处理在同一位置删除行同时又插入行可能导致出现的空行问题
             for idx, i, j in zip(range(len(src_key_list)), src_key_list, cmp_key_list):
                 if i == j == None:
-                    r = 0
+                    r = 0  # 通过循环自加来测出在该处出现了多少空行
                     for n in range(1, idx + 1):
                         if src_key_list[idx - n] == cmp_key_list[idx - n]:
                             break
                         r += 1
-                    for n in range(1,r + 1):
-                        
+                    for n in range(1, r + 1):
+                        # 删除原工作表及目标工作表中的当前空行
+                        self.src_excel.delete_rows(
+                            self.src_title_row + idx + n)
+                        self.cmp_excel.delete_rows(
+                            self.cmp_title_row + idx + n)
+                        # 将原工作表前一项的下方插入空白行
+                        self.src_excel.insert_rows(
+                            self.src_title_row + idx + 2 - n)
+                        # 将对比工作表前一顶的上方插入空白行，从而形成错行的效果
+                        self.cmp_excel.insert_rows(
+                            self.cmp_title_row + idx + 1 - n)
+
             print(src_key_list)
             print(cmp_key_list)
+            self.font_color(src_excel.ws['B3'], 'shan')
 
 
 # 调试
 if __name__ == '__main__':
-    src_excel = ExcelOperate('tests\示例.xlsx')
-    cmp_excel = ExcelOperate('tests\示例 - 对比.xlsx')
+    src_excel = ExcelOperate('tests\比较示例 - 原.xlsx')
+    cmp_excel = ExcelOperate('tests\比较示例 - 对比.xlsx')
     report_path = 'D:/Desktop/对比报告.xlsx'
     cmper = SheetComparison(src_excel, cmp_excel, report_path)
     cmper.set_title_row(2, 2)
