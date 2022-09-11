@@ -85,8 +85,8 @@ def is_delete(srcl: list, tagl: list):
 
 
 if __name__ == '__main__':
-    srcl = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+    srcl = [0, 1, 2, 3, 4,None,None, 5, 6, 7, 8, 9]
     tagl = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
 
-    del_info = is_delete(srcl, tagl)
-    print(del_info)
+    l = duplicate_to_only(srcl)
+    print(l)

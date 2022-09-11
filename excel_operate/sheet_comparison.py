@@ -49,34 +49,108 @@ class SheetComparison:
         if self.src_title_row != self.cmp_title_row:
             if self.src_title_row > self.cmp_title_row:
                 self.cmp_excel.insert_rows(
-                    0, self.src_title_row-self.cmp_title_row)
+                    1, self.src_title_row-self.cmp_title_row)
                 self.cmp_title_row = self.src_title_row
             else:
                 self.src_excel.insert_rows(
-                    0, self.cmp_title_row-self.src_title_row)
+                    1, self.cmp_title_row-self.src_title_row)
                 self.src_title_row = self.cmp_title_row
 
         # 如果目标工作表的关键列与原工作表的关键列不在同一列
         if self.src_key_col != self.cmp_key_col:
             if self.src_key_col > self.cmp_key_col:
                 self.cmp_excel.insert_rows(
-                    0, self.src_key_col-self.cmp_key_col)
+                    1, self.src_key_col-self.cmp_key_col)
                 self.cmp_key_col = self.src_key_col
             else:
                 self.src_excel.insert_rows(
-                    0, self.cmp_key_col-self.src_key_col)
+                    1, self.cmp_key_col-self.src_key_col)
                 self.src_key_col = self.cmp_key_col
 
         # 如果目标工作表的表头行与原工作表的表头行不相同
-        src_title_list = [i.value for i in self.src_excel.ws[self.src_title_row]]
-        cmp_title_list = [i.value for i in self.cmp_excel.ws[self.cmp_title_row]]
+        src_title_list = [
+            i.value for i in self.src_excel.ws[self.src_title_row]]
+        cmp_title_list = [
+            i.value for i in self.cmp_excel.ws[self.cmp_title_row]]
+        # print(cmp_title_list)
         if src_title_list != cmp_title_list:
-            pass
+            self.src_excel.insert_rows(1)
+            self.src_title_row += 1
+            self.cmp_excel.insert_rows(1)
+            self.cmp_title_row += 1
+            src_title_list = duplicate_to_only(
+                src_title_list)  # 通过重命名的方式给列表去重。
+            cmp_title_list = duplicate_to_only(
+                cmp_title_list)  # 通过重命名的方式给列表去重。
+            title_insert_info = is_insert(src_title_list, cmp_title_list)
+            title_delete_info = is_insert(cmp_title_list, src_title_list)
+            title_append_info = is_appand(src_title_list, cmp_title_list)
+            if title_insert_info != None:
+                n = 1
+                for i in title_insert_info:
+                    self.src_excel.insert_cols(i + n, title_insert_info[i])
+                    n += title_insert_info[i]
+                src_title_list
+            if title_delete_info != None:
+                n = 1
+                for i in title_delete_info:
+                    self.cmp_excel.insert_cols(i + n, title_delete_info[i])
+                    n += title_delete_info[i]
+            if title_append_info != None:
+                self.src_excel.insert_cols(
+                    self.src_excel.ws.max_column + 1, title_append_info)
+            src_title_list = [
+                i.value for i in self.src_excel.ws[self.src_title_row]]
+            cmp_title_list = [
+                i.value for i in self.cmp_excel.ws[self.cmp_title_row]]
+            for idx, i, j in zip(range(len(src_title_list)), src_title_list, cmp_title_list):
+                if i == None:
+                    self.src_excel.ws[1][idx].value = '临'
+                    self.cmp_excel.ws[1][idx].value = '增'
+                if j == None:
+                    self.src_excel.ws[1][idx].value = '删'
+                    self.cmp_excel.ws[1][idx].value = '临'
 
         # 如果目标工作表的关键列与原工作表的关键列不相同
-        src_key_list = [i.value for idx,i in enumerate(self.src_excel.ws[get_column_letter(self.src_key_col)],1) if idx>self.src_title_row]
-        if self.src_excel.ws[get_column_letter(self.src_key_col)] != self.cmp_excel.ws[get_column_letter(self.cmp_key_col)]:
-            pass
+        src_key_list = [i.value for idx, i in enumerate(
+            self.src_excel.ws[get_column_letter(self.src_key_col)], 1) if idx > self.src_title_row]
+        cmp_key_list = [i.value for idx, i in enumerate(
+            self.cmp_excel.ws[get_column_letter(self.cmp_key_col)], 1) if idx > self.cmp_title_row]
+        if src_key_list != cmp_key_list:
+            src_key_list = duplicate_to_only(src_key_list)  # 通过重命名的方式给列表去重。
+            cmp_key_list = duplicate_to_only(cmp_key_list)  # 通过重命名的方式给列表去重。
+            insert_info = is_insert(src_key_list, cmp_key_list)
+            delete_info = is_insert(cmp_key_list, src_key_list)
+            append_info = is_appand(src_key_list, cmp_key_list)
+            if insert_info != None:
+                n = self.src_title_row + 1
+                for i in insert_info:
+                    self.src_excel.insert_rows(i + n, insert_info[i])
+                    n += insert_info[i]
+            if delete_info != None:
+                n = self.cmp_title_row + 1
+                for i in delete_info:
+                    self.cmp_excel.insert_rows(i + n, delete_info[i])
+                    n += delete_info[i]
+            if append_info != None:
+                self.src_excel.insert_rows(
+                    self.src_excel.ws.max_row + 1, append_info)
+            src_key_list = [i.value for idx, i in enumerate(
+                self.src_excel.ws[get_column_letter(self.src_key_col)], 1) if idx > self.src_title_row]
+            cmp_key_list = [i.value for idx, i in enumerate(
+                self.cmp_excel.ws[get_column_letter(self.cmp_key_col)], 1) if idx > self.cmp_title_row]
+            # 处理在同一位置删除行同时又插入行可能导致出现的空行问题
+            for idx, i, j in zip(range(len(src_key_list)), src_key_list, cmp_key_list):
+                if i == j == None:
+                    r = 0
+                    for n in range(1, idx + 1):
+                        if src_key_list[idx - n] == cmp_key_list[idx - n]:
+                            break
+                        r += 1
+                    for n in range(1,r + 1):
+                        
+            print(src_key_list)
+            print(cmp_key_list)
 
 
 # 调试
@@ -87,3 +161,6 @@ if __name__ == '__main__':
     cmper = SheetComparison(src_excel, cmp_excel, report_path)
     cmper.set_title_row(2, 2)
     cmper.set_key_col(2, 2)
+    cmper.compare()
+    src_excel.save('D:/Desktop/1111src.xlsx')
+    cmp_excel.save('D:/Desktop/1111cmp.xlsx')
