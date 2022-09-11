@@ -73,14 +73,15 @@
   + 示例代码如下：
 
     ```
+    from excel_operate import ExcelOperate   # 导入模块
     from excel_operate import SheetComparison   # 导入模块
 
     src_excel = ExcelOperate('tests\比较示例 - 原.xlsx')  # 原工作表对象实例化
     cmp_excel = ExcelOperate('tests\比较示例 - 对比.xlsx')  # 目标工作表对象实例化
     report_path = 'D:/Desktop/对比报告.xlsx'  # 报告保存路径
     cmper = SheetComparison(src_excel, cmp_excel)  # 实例化比较对象
-    cmper.set_title_row(2, 2)  # 设置表头行
-    cmper.set_key_col(2, 2)  # 设置关键列
+    cmper.set_title_row(2, 2)  # 设置表头行为原工作表第2行，目标工作表第2行
+    cmper.set_key_col(2, 2)  # 设置关键列为原工作表第2列，目标工作表第2列
     report = cmper.compare()  # 比较并返回结果
     report.save(report_path)  # 保存结果
     print('对比完成！对比报告已保存至：', report_path)  # 打印结果
@@ -99,9 +100,9 @@
     + 参数 `l`为传入的列表。
     + 参数 `remove`可传入布尔值类型数据，默认为 `False`即以重命名的方式去重，如果传入 `True`则会将列表中第二个及之后出现的重复元素直接删除。
   + 列表比较：
-    + 使用 `list_operate`模块下的 `is_insert(srcl, tagl)`可以判断目标列表是否为原列表插入元素所得。如果判断为是则返回一个以插入位置索引为键，该索引位置插入的元素个数为值的一个字典；否则返回None。
-    + 使用 `list_operate`模块下的 `is_delete(srcl, tagl)`可以判断目标列表是否为原列表删除元素所得。如果判断为是则返回一个以删除位置索引为键，该索引位置删除的元素个数为值的一个字典；否则返回None。
-    + 使用 `list_operate`模块下的 `is_appand(srcl, tagl)`可以判断目标列表是否为原列表后添加元素所得。如果判断为是则返回添加的元素个数；否则返回None。
+    + 使用 `list_operate`模块下的 `is_insert(srcl, tagl)`可以判断目标列表是否为原列表插入元素所得。如果判断为是则返回一个以插入位置索引为键，该索引位置插入的元素个数为值的一个字典；否则返回`None`。
+    + 使用 `list_operate`模块下的 `is_delete(srcl, tagl)`可以判断目标列表是否为原列表删除元素所得。如果判断为是则返回一个以删除位置索引为键，该索引位置删除的元素个数为值的一个字典；否则返回`None`。
+    + 使用 `list_operate`模块下的 `is_appand(srcl, tagl)`可以判断目标列表是否为原列表后添加元素所得。如果判断为是则返回添加的元素个数；否则返回`None`。
 
 ## 四、版本历史
 
