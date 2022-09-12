@@ -14,37 +14,41 @@ from openpyxl.styles import Alignment, Side, Border, Font
 
 class SheetComparison:
     def __init__(self, src_excel: ExcelOperate, cmp_excel: ExcelOperate) -> None:
-        '''===================================\n
-        传入两个Excel对象，进行比较。生成报告
-        src_excel: 原Excel对象，可传入ExcelOperate类对象
-        cmp_excel: 待比较的Excel对象，可传入ExcelOperate类对象
+        '''---
+        ### 传入两个Excel对象，进行比较。生成报告
+        ---
+        + src_excel: 原Excel对象，可传入ExcelOperate类对象
+        + cmp_excel: 待比较的Excel对象，可传入ExcelOperate类对象
         '''
         self.src_excel = src_excel
         self.cmp_excel = cmp_excel
 
     def set_title_row(self, src_title_row: int, cmp_title_row: int):
-        '''===================================\n
-        此方法可以为原工作表及待比较工作表设置表头行
-        src_title_row: 原Excel工作表的表头行，可传入整数类型
-        cmp_title_row: 待比较Excel工作表的表头行，可传入整数类型
+        '''---
+        ### 此方法可以为原工作表及待比较工作表设置表头行
+        ---
+        + src_title_row: 原Excel工作表的表头行，可传入整数类型
+        + cmp_title_row: 待比较Excel工作表的表头行，可传入整数类型
         '''
         self.src_title_row = src_title_row
         self.cmp_title_row = cmp_title_row
 
     def set_key_col(self, src_key_col: int, cmp_key_col: int):
-        '''===================================\n
-        此方法可以为原工作表及待比较工作表设置关键列
-        src_key_col: 原Excel工作表的关键列，可传入整数类型
-        cmp_key_col: 待比较Excel工作表的关键列，可传入整数类型
+        '''---
+        ### 此方法可以为原工作表及待比较工作表设置关键列
+        ---
+        + src_key_col: 原Excel工作表的关键列，可传入整数类型
+        + cmp_key_col: 待比较Excel工作表的关键列，可传入整数类型
         '''
         self.src_key_col = src_key_col
         self.cmp_key_col = cmp_key_col
 
     def font_color(self, cell, style):
-        '''===================================\n
-        此方法为目标单元格设置样式
-        cell: 目标单元格，请传入单元格对象
-        style: 目标单元格将要设置成的样式，只支持'zeng','shan'和'gai'这三个参数。
+        '''---
+        ### 此方法为目标单元格设置样式
+        ---
+        + cell: 目标单元格，请传入单元格对象
+        + style: 目标单元格将要设置成的样式，只支持'zeng','shan'和'gai'这三个参数。
         '''
         if style == 'zeng':
             cell.font = Font(color='0000FF')
@@ -54,8 +58,9 @@ class SheetComparison:
             cell.font = Font(color='FF00FF')
 
     def compare(self):
-        '''===================================\n
-        对比工作表：将原工作表及目标工作表的表头行和关键列设置好之后即可使用此方法对比工作表，并返回对比报告。
+        '''---
+        ### 对比工作表：将原工作表及目标工作表的表头行和关键列设置好之后即可使用此方法对比工作表，并返回对比报告。
+        ---
         '''
         # 如果目标工作表的表头行与原工作表的表头行不在同一行
         if self.src_title_row != self.cmp_title_row:

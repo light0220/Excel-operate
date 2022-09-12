@@ -12,11 +12,13 @@ from openpyxl.utils import get_column_letter
 
 class SheetCopy:
     def __init__(self, src_file_path: str = None, tag_file_path: str = None, sheet_name: str = None, column_adjust: float = 0) -> None:
-        '''===================================\n
-        src_file_path: 此参数为源Excel文件路径
-        tag_file_path: 此参数为目标Excel文件路径，不指定的情况下默认新建工作薄
-        sheet_name: 此参数为被复制的工作表名称，不指定的情况下默认为源工作表中的当前激活工作表
-        column_adjust: 此参数为列宽修正系数，作用为修正列宽误差
+        '''---
+        ### 工作表复制
+        ---
+        + src_file_path: 此参数为源Excel文件路径
+        + tag_file_path: 此参数为目标Excel文件路径，不指定的情况下默认新建工作薄
+        + sheet_name: 此参数为被复制的工作表名称，不指定的情况下默认为源工作表中的当前激活工作表
+        + column_adjust: 此参数为列宽修正系数，作用为修正列宽误差
         '''
         self.src_file = ExcelOperate(src_file_path, sheet_name)
         if tag_file_path == None:
@@ -41,12 +43,13 @@ class SheetCopy:
 
     # 定义工作表复制模块
     def copy_sheet(self, src_file: ExcelOperate = None, tag_file: ExcelOperate = None, origin_row: int = 1, origin_col: int = 1):
-        '''===================================\n
-        复制工作表
-        src_file: 原文件的ExcelOperate对象
-        tag_file: 目标文件的ExcelOperate对象
-        origin_row: 设定目标工作表写入的起始行，默认从第1行开始写入，传入大于或等于1的整数则会从设定的行开始写入。
-        origin_col: 设定目标工作表写入的起始列，默认从第1列开始写入，传入大于或等于1的整数则会从设定的列开始写入。
+        '''---
+        ### 复制工作表
+        ---
+        + src_file: 原文件的ExcelOperate对象
+        + tag_file: 目标文件的ExcelOperate对象
+        + origin_row: 设定目标工作表写入的起始行，默认从第1行开始写入，传入大于或等于1的整数则会从设定的行开始写入。
+        + origin_col: 设定目标工作表写入的起始列，默认从第1列开始写入，传入大于或等于1的整数则会从设定的列开始写入。
         '''
         if src_file == None:
             src_file = self.src_file
