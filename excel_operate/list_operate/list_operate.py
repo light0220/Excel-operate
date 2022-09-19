@@ -40,6 +40,7 @@ def is_insert(srcl: list, tagl: list):
     + tagl: 目标列表
     '''
     insert_info = {}
+    n = 0
     for i in range(len(srcl)):
         if tagl[i + n] != srcl[i]:
             if srcl[i] not in tagl[i + n:]:

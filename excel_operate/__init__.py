@@ -5,7 +5,7 @@
 @Contact :   light22@126.com
 '''
 
-from .excel_operate import ExcelOperate
-from .sheet_copy import SheetCopy
-from .sheet_comparison import SheetComparison
-from .list_operate import *
+from excel_operate.excel_operate import ExcelOperate
+from excel_operate.sheet_copy import SheetCopy
+from excel_operate.sheet_comparison import SheetComparison
+from excel_operate.list_operate import *

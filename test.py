@@ -4,7 +4,7 @@ from excel_operate import SheetComparison
 from excel_operate import is_insert
 
 excel = ExcelOperate('tests/示例.xlsx')
-excel.ws['C15'].value = '测试通过！！'
+# excel.ws['C15'].value = '测试通过！！'
 for row in excel.ws.iter_rows(min_row=3,max_row=5,min_col=2,max_col=5):
     for cell in row:
         print(cell.value)
@@ -19,7 +19,7 @@ tag_file = stcper.copy_sheet()
 tag_file.save('D:/desktop/1111.xlsx')
 
 src_excel = ExcelOperate()
-cmp_excel = SheetComparison()
+# cmp_excel = SheetComparison()
 
 l1 = [1, 3, 5, 6, 7]
 l2 = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
