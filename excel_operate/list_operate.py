@@ -40,15 +40,16 @@ def is_insert(srcl: list, tagl: list):
     + tagl: 目标列表
     '''
     insert_info = {}
-    for i in range(len(tagl)):
-        if tagl[i] not in srcl:
-            for ins in range(1, len(tagl)-i):
-                if tagl[i+ins] in srcl:
-                    if srcl.index(tagl[i+ins]) not in insert_info:
-                        insert_info[srcl.index(tagl[i+ins])] = 1
-                    else:
-                        insert_info[srcl.index(tagl[i+ins])] += 1
-                    break
+    for i in range(len(srcl)):
+        if tagl[i + n] != srcl[i]:
+            if srcl[i] not in tagl[i + n:]:
+                n -= 1
+            else:
+                for ins in range(1, len(tagl) - n - i):
+                    if tagl[i + n + ins] == srcl[i]:
+                        insert_info[srcl.index(tagl[i + n + ins])] = ins
+                        n += ins
+                        break
     if insert_info == {}:
         return None
     else:
