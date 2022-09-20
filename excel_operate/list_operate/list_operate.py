@@ -100,8 +100,10 @@ def is_delete(srcl: list, tagl: list):
 
 
 if __name__ == '__main__':
-    srcl = [0, 1, 2, 3, 4,None,None, 5, 6, 7, 8, 9]
-    tagl = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+    l1 = [0, 1, 'x1', 'x2', 2, 3, 4, 5, 6, 7, 8, 9]
+    l2 = [0, 1, 2, 3, 4, 5, 6, 7, 'x1', 'x2', 8, 9]
 
-    l = duplicate_to_only(srcl)
-    print(l)
+    ins_info = is_insert(l2, l1)
+    del_info = is_delete(l2, l1)
+    print('insert:', ins_info)
+    print('delete:', del_info)
