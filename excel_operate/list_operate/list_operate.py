@@ -78,12 +78,21 @@ def is_delete(srcl: list, tagl: list):
     + tagl: 目标列表
     '''
     delete_info = {}
-    for i in srcl:
-        if i not in tagl:
-            if srcl.index(i) not in delete_info:
-                delete_info[srcl.index(i)] = 1
+    n = 0
+    for i in range(len(tagl)):
+        if srcl[i + n] != tagl[i]:
+            if srcl[i + n] not in tagl[i:]:
+                for ins in range(1, len(srcl) - n - i):
+                    if srcl[i + n + ins] == tagl[i]:
+                        delete_info[i + n] = ins
+                        n += ins
+                        break
+                    delete_info[i + n] = 1
             else:
-                delete_info[srcl.index(i)] += 1
+                for ins in range(1, len(tagl) - i):
+                    if tagl[i + ins] == srcl[i + n]:
+                        n -= 1
+                        break
     if delete_info == {}:
         return None
     else:

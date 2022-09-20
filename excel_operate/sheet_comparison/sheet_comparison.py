@@ -99,7 +99,7 @@ class SheetComparison:
             cmp_title_list = duplicate_to_only(
                 cmp_title_list)  # 通过重命名的方式给列表去重。
             title_insert_info = is_insert(src_title_list, cmp_title_list)
-            title_delete_info = is_insert(cmp_title_list, src_title_list)
+            title_delete_info = is_delete(src_title_list, cmp_title_list)
             title_append_info = is_appand(src_title_list, cmp_title_list)
             if title_insert_info != None:
                 n = 1
@@ -156,7 +156,7 @@ class SheetComparison:
             src_key_list = duplicate_to_only(src_key_list)  # 通过重命名的方式给列表去重。
             cmp_key_list = duplicate_to_only(cmp_key_list)  # 通过重命名的方式给列表去重。
             insert_info = is_insert(src_key_list, cmp_key_list)
-            delete_info = is_insert(cmp_key_list, src_key_list)
+            delete_info = is_delete(src_key_list, cmp_key_list)
             append_info = is_appand(src_key_list, cmp_key_list)
             if insert_info != None:
                 n = self.src_title_row + 1
@@ -175,26 +175,28 @@ class SheetComparison:
                 self.src_excel.ws[get_column_letter(self.src_key_col)], 1) if idx > self.src_title_row]
             cmp_key_list = [i.value for idx, i in enumerate(
                 self.cmp_excel.ws[get_column_letter(self.cmp_key_col)], 1) if idx > self.cmp_title_row]
+            print(src_key_list)
+            print(cmp_key_list)
             # 处理在同一位置删除行同时又插入行可能导致出现的空行问题
-            for idx, i, j in zip(range(len(src_key_list)), src_key_list, cmp_key_list):
-                if i == j == None:
-                    r = 0  # 通过循环自加来测出在该处出现了多少空行
-                    for n in range(1, idx + 1):
-                        if src_key_list[idx - n] == cmp_key_list[idx - n]:
-                            break
-                        r += 1
-                    for n in range(1, r + 1):
-                        # 删除原工作表及目标工作表中的当前空行
-                        self.src_excel.delete_rows(
-                            self.src_title_row + idx + n)
-                        self.cmp_excel.delete_rows(
-                            self.cmp_title_row + idx + n)
-                        # 将原工作表前一项的下方插入空白行
-                        self.src_excel.insert_rows(
-                            self.src_title_row + idx + 2 - n)
-                        # 将对比工作表前一顶的上方插入空白行，从而形成错行的效果
-                        self.cmp_excel.insert_rows(
-                            self.cmp_title_row + idx + 1 - n)
+            # for idx, i, j in zip(range(len(src_key_list)), src_key_list, cmp_key_list):
+            #     if i == j == None:
+            #         r = 0  # 通过循环自加来测出在该处出现了多少空行
+            #         for n in range(1, idx + 1):
+            #             if src_key_list[idx - n] == cmp_key_list[idx - n]:
+            #                 break
+            #             r += 1
+            #         for n in range(1, r + 1):
+            #             # 删除原工作表及目标工作表中的当前空行
+            #             self.src_excel.delete_rows(
+            #                 self.src_title_row + idx + n)
+            #             self.cmp_excel.delete_rows(
+            #                 self.cmp_title_row + idx + n)
+            #             # 将原工作表前一项的下方插入空白行
+            #             self.src_excel.insert_rows(
+            #                 self.src_title_row + idx + 2 - n)
+            #             # 将对比工作表前一顶的上方插入空白行，从而形成错行的效果
+            #             self.cmp_excel.insert_rows(
+            #                 self.cmp_title_row + idx + 1 - n)
         # 对比行，在原工作表行首写入标记同时设置字体颜色
         self.src_excel.insert_cols(1, width=3)  # 在原工作表首列处插入地行空列用于标记'增','删','改'
         for cell in self.src_excel.ws['A']:
