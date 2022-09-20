@@ -77,26 +77,16 @@ def is_delete(srcl: list, tagl: list):
     + srcl: 原列表
     + tagl: 目标列表
     '''
-    delete_info = {}
-    n = 0
-    for i in range(len(tagl)):
-        if srcl[i + n] != tagl[i]:
-            if srcl[i + n] not in tagl[i:]:
-                for ins in range(1, len(srcl) - n - i):
-                    if srcl[i + n + ins] == tagl[i]:
-                        delete_info[i + n] = ins
-                        n += ins
-                        break
-                    delete_info[i + n] = 1
-            else:
-                for ins in range(1, len(tagl) - i):
-                    if tagl[i + ins] == srcl[i + n]:
-                        n -= 1
-                        break
-    if delete_info == {}:
+    if len(tagl) <= len(srcl):
         return None
-    else:
-        return delete_info
+    dic_info = {}
+    for i in range(len(tagl)):
+        if tagl[i] != srcl[i - sum(dic_info.values())]:
+            dic_info[i] = dic_info.get(i, 0) + 1
+        if i - sum(dic_info.values()) == len(srcl) - 1 and i < len(tagl) - 1:
+            dic_info[i + 1] = dic_info.get(i + 1, 0) + len(tagl) - 1 - i
+            return dic_info
+    return dic_info
 
 
 if __name__ == '__main__':
