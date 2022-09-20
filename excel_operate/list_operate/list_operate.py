@@ -6,6 +6,9 @@
 '''
 
 
+from readline import insert_text
+
+
 def duplicate_to_only(l: list, remove=False):
     '''---
     ### 传入一个列表，去除列表中的重复项
@@ -13,22 +16,18 @@ def duplicate_to_only(l: list, remove=False):
     + l: 目标列表
     + remove: 默认参数False将第二个及之后重复的项目重命名为name(1),name(2)...的格式，传入True则直接删除列表中第二次及以后出现的所有重复项。
     '''
-    tmp_list = [i for i in l]  # 复制一份列表以便后续操作
+    tmp_list = [] 
     if remove == False:
-        for i in range(len(l)):
-            if l.count(l[i]) > 1:
-                if i != l.index(l[i]):
-                    for n in range(l.count(l[i])):
-                        if f'{l[i]} ({n+1})' not in tmp_list:
-                            tmp_list[i] = f'{l[i]} ({n+1})'
-                            break
+        for i in l:
+            if i not in tmp_list:
+                tmp_list.append(i)
+            else:
+                tmp_list.append(f"{i}({tmp_list.count(i) + 1})")
         return tmp_list
     else:
-        tmp_list.reverse()
         for i in l:
-            if tmp_list.count(i) > 1:
-                tmp_list.remove(i)
-        tmp_list.reverse()
+            if i not in tmp_list:
+                tmp_list.append(i)
         return tmp_list
 
 
@@ -39,23 +38,23 @@ def is_insert(srcl: list, tagl: list):
     + srcl: 原列表
     + tagl: 目标列表
     '''
-    insert_info = {}
-    n = 0
-    for i in range(len(srcl)):
-        if tagl[i + n] != srcl[i]:
-            if srcl[i] not in tagl[i + n:]:
-                n -= 1
-            else:
-                for ins in range(1, len(tagl) - n - i):
-                    if tagl[i + n + ins] == srcl[i]:
-                        insert_info[srcl.index(tagl[i + n + ins])] = ins
-                        n += ins
-                        break
-    if insert_info == {}:
+    if len(srcl) >= len(tagl):
         return None
-    else:
-        return insert_info
-
+    # 一般认为，插入元素为前插，最后一项不一样，则不能通过插入使二者一样
+    if srcl[-1] != tagl[-1]:
+        return None
+    insert_info = {}
+    # [1, 2, 3]
+    # [0, 1, 3, 3]
+    target_index = 0
+    for i in range(len(tagl)):
+        if tagl[i] != srcl[target_index]:
+            insert_info[target_index] = insert_info.get(target_index, 0) + 1
+        else:
+            target_index += 1
+    if target_index == len(srcl) - 1:
+        return None
+    return insert_info
 
 def is_appand(srcl: list, tagl: list):
     '''---
@@ -64,11 +63,12 @@ def is_appand(srcl: list, tagl: list):
     + srcl: 原列表
     + tagl: 目标列表
     '''
-    append_info = None
-    if tagl[-1] != srcl[-1] and srcl[-1] in tagl:
-        append_info = len(tagl[tagl.index(srcl[-1])+1:])
-    return append_info
-
+    if len(tagl) <= len(srcl):
+        return None
+    for i in range(len(srcl)):
+        if srcl[i] != tagl[i]:
+            return None
+    return len(tagl) - len(srcl)
 
 def is_delete(srcl: list, tagl: list):
     '''---
