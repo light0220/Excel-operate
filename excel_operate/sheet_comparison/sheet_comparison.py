@@ -175,8 +175,8 @@ class SheetComparison:
                 self.src_excel.ws[get_column_letter(self.src_key_col)], 1) if idx > self.src_title_row]
             cmp_key_list = [i.value for idx, i in enumerate(
                 self.cmp_excel.ws[get_column_letter(self.cmp_key_col)], 1) if idx > self.cmp_title_row]
-            print(src_key_list)
-            print(cmp_key_list)
+            # print(src_key_list)
+            # print(cmp_key_list)
             # 处理在同一位置删除行同时又插入行可能导致出现的空行问题
             # for idx, i, j in zip(range(len(src_key_list)), src_key_list, cmp_key_list):
             #     if i == j == None:
