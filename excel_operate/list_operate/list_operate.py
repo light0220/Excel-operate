@@ -38,23 +38,22 @@ def is_insert(srcl: list, tagl: list):
     + srcl: 原列表
     + tagl: 目标列表
     '''
-    if len(srcl) >= len(tagl):
-        return None
-    # 一般认为，插入元素为前插，最后一项不一样，则不能通过插入使二者一样
-    if srcl[-1] != tagl[-1]:
-        return None
     insert_info = {}
-    # [1, 2, 3]
-    # [0, 1, 3, 3]
-    target_index = 0
-    for i in range(len(tagl)):
-        if tagl[i] != srcl[target_index]:
-            insert_info[target_index] = insert_info.get(target_index, 0) + 1
-        else:
-            target_index += 1
-    if target_index == len(srcl) - 1:
+    n = 0
+    for i in range(len(srcl)):
+        if tagl[i + n] != srcl[i]:
+            if srcl[i] not in tagl[i + n:]:
+                n -= 1
+            else:
+                for ins in range(1, len(tagl) - n - i):
+                    if tagl[i + n + ins] == srcl[i]:
+                        insert_info[srcl.index(tagl[i + n + ins])] = ins
+                        n += ins
+                        break
+    if insert_info == {}:
         return None
-    return insert_info
+    else:
+        return insert_info
 
 
 def is_appand(srcl: list, tagl: list):
@@ -64,12 +63,10 @@ def is_appand(srcl: list, tagl: list):
     + srcl: 原列表
     + tagl: 目标列表
     '''
-    if len(tagl) <= len(srcl):
-        return None
-    for i in range(len(srcl)):
-        if srcl[i] != tagl[i]:
-            return None
-    return len(tagl) - len(srcl)
+    append_info = None
+    if tagl[-1] != srcl[-1] and srcl[-1] in tagl:
+        append_info = len(tagl[tagl.index(srcl[-1])+1:])
+    return append_info
 
 
 def is_delete(srcl: list, tagl: list):
@@ -79,26 +76,36 @@ def is_delete(srcl: list, tagl: list):
     + srcl: 原列表
     + tagl: 目标列表
     '''
-    if len(tagl) <= len(srcl):
-        return None
-    dic_info = {}
+    delete_info = {}
+    n = 0
     for i in range(len(tagl)):
-        if tagl[i] != srcl[i - sum(dic_info.values())]:
-            dic_info[i] = dic_info.get(i, 0) + 1
-        if i - sum(dic_info.values()) == len(srcl) - 1 and i < len(tagl) - 1:
-            dic_info[i + 1] = dic_info.get(i + 1, 0) + len(tagl) - 1 - i
-            return dic_info
-    return dic_info
+        if srcl[i + n] != tagl[i]:
+            if srcl[i + n] not in tagl[i:]:
+                for ins in range(1, len(srcl) - n - i):
+                    if srcl[i + n + ins] == tagl[i]:
+                        delete_info[i + n] = ins
+                        n += ins
+                        break
+                    delete_info[i + n] = 1
+            else:
+                for ins in range(1, len(tagl) - i):
+                    if tagl[i + ins] == srcl[i + n]:
+                        n -= 1
+                        break
+    if delete_info == {}:
+        return None
+    else:
+        return delete_info
 
 
 if __name__ == '__main__':
     l1 = [0, 1, 'x1', 'x2', 2, 3, 4, 5, 6, 7, 8, 9]
     l2 = [0, 1, 2, 3, 4, 5, 6, 7, 'x1', 'x2', 8, 9]
-    l = ['a', 'a', 'a', 'a', 'a', 'a', 'a', 'a', 'a']
-    l0 = duplicate_to_only(l,False)
-    print(l0)
+    # l = ['a', 'a', 'a', 'a', 'a', 'a', 'a', 'a', 'a']
+    # l0 = duplicate_to_only(l,False)
+    # print(l0)
 
-    # ins_info = is_insert(l2, l1)
-    # del_info = is_delete(l2, l1)
-    # print('insert:', ins_info)
-    # print('delete:', del_info)
+    ins_info = is_insert(l2, l1)
+    del_info = is_delete(l2, l1)
+    print('insert:', ins_info)
+    print('delete:', del_info)
