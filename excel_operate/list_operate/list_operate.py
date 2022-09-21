@@ -6,9 +6,6 @@
 '''
 
 
-from readline import insert_text
-
-
 def duplicate_to_only(l: list, remove=False):
     '''---
     ### 传入一个列表，去除列表中的重复项
@@ -16,13 +13,16 @@ def duplicate_to_only(l: list, remove=False):
     + l: 目标列表
     + remove: 默认参数False将第二个及之后重复的项目重命名为name(1),name(2)...的格式，传入True则直接删除列表中第二次及以后出现的所有重复项。
     '''
-    tmp_list = [] 
+    tmp_list = []
     if remove == False:
         for i in l:
             if i not in tmp_list:
                 tmp_list.append(i)
             else:
-                tmp_list.append(f"{i}({tmp_list.count(i) + 1})")
+                for n in range(l.count(i)):
+                    if f'{i} ({n+1})' not in tmp_list:
+                        tmp_list.append(f'{i} ({n+1})')
+                        break
         return tmp_list
     else:
         for i in l:
@@ -56,6 +56,7 @@ def is_insert(srcl: list, tagl: list):
         return None
     return insert_info
 
+
 def is_appand(srcl: list, tagl: list):
     '''---
     ### 传入两个列表，判断目标列表是否为原列表后添加元素所得。如果判断为是则返回添加的元素个数；否则返回None。
@@ -69,6 +70,7 @@ def is_appand(srcl: list, tagl: list):
         if srcl[i] != tagl[i]:
             return None
     return len(tagl) - len(srcl)
+
 
 def is_delete(srcl: list, tagl: list):
     '''---
@@ -92,8 +94,11 @@ def is_delete(srcl: list, tagl: list):
 if __name__ == '__main__':
     l1 = [0, 1, 'x1', 'x2', 2, 3, 4, 5, 6, 7, 8, 9]
     l2 = [0, 1, 2, 3, 4, 5, 6, 7, 'x1', 'x2', 8, 9]
+    l = ['a', 'a', 'a', 'a', 'a', 'a', 'a', 'a', 'a']
+    l0 = duplicate_to_only(l,False)
+    print(l0)
 
-    ins_info = is_insert(l2, l1)
-    del_info = is_delete(l2, l1)
-    print('insert:', ins_info)
-    print('delete:', del_info)
+    # ins_info = is_insert(l2, l1)
+    # del_info = is_delete(l2, l1)
+    # print('insert:', ins_info)
+    # print('delete:', del_info)
