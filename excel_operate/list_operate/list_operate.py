@@ -39,17 +39,23 @@ def is_insert(srcl: list, tagl: list):
     + tagl: 目标列表
     '''
     insert_info = {}
-    n = 0
-    for i in range(len(srcl)):
-        if tagl[i + n] != srcl[i]:
-            if srcl[i] not in tagl[i + n:]:
-                n -= 1
-            else:
-                for ins in range(1, len(tagl) - n - i):
-                    if tagl[i + n + ins] == srcl[i]:
-                        insert_info[srcl.index(tagl[i + n + ins])] = ins
-                        n += ins
-                        break
+    sl = len(srcl)
+    tl = len(tagl)
+    si = 0
+    ti = 0
+    for i in range(min(sl, tl)):
+        if i + ti < tl and i + si < sl and tagl[i + ti] != srcl[i + si]:
+            for n in range(1, max(tl, sl) - i):
+                if i + ti + n < tl and tagl[i + ti + n] == srcl[i + si]:
+                    insert_info[i + si] = n
+                    ti += n
+                    break
+                if i + si + n < sl and srcl[i + si + n] == tagl[i + ti]:
+                    si += n
+                    break
+                if i + ti + n >= len(tagl) and i + si + n >= len(srcl):
+                    insert_info[i + si] = 1
+                    break
     if insert_info == {}:
         return None
     else:
@@ -77,21 +83,23 @@ def is_delete(srcl: list, tagl: list):
     + tagl: 目标列表
     '''
     delete_info = {}
-    n = 0
-    for i in range(len(tagl)):
-        if srcl[i + n] != tagl[i]:
-            if srcl[i + n] not in tagl[i:]:
-                for ins in range(1, len(srcl) - n - i):
-                    if srcl[i + n + ins] == tagl[i]:
-                        delete_info[i + n] = ins
-                        n += ins
-                        break
-                    delete_info[i + n] = 1
-            else:
-                for ins in range(1, len(tagl) - i):
-                    if tagl[i + ins] == srcl[i + n]:
-                        n -= 1
-                        break
+    sl = len(srcl)
+    tl = len(tagl)
+    si = 0
+    ti = 0
+    for i in range(min(sl, tl)):
+        if i + ti < tl and i + si < sl and tagl[i + ti] != srcl[i + si]:
+            for n in range(1, max(tl, sl) - i):
+                if i + ti + n < tl and tagl[i + ti + n] == srcl[i + si]:
+                    ti += n
+                    break
+                if i + si + n < sl and srcl[i + si + n] == tagl[i + ti]:
+                    delete_info[i + si] = n
+                    si += n
+                    break
+                if i + ti + n >= len(tagl) and i + si + n >= len(srcl):
+                    delete_info[i + si] = 1
+                    break
     if delete_info == {}:
         return None
     else:
@@ -105,7 +113,7 @@ if __name__ == '__main__':
     # l0 = duplicate_to_only(l,False)
     # print(l0)
 
-    ins_info = is_insert(l1, l2)
-    del_info = is_delete(l1, l2)
+    ins_info = is_insert(l2, l1)
+    del_info = is_delete(l2, l1)
     print('insert:', ins_info)
     print('delete:', del_info)
