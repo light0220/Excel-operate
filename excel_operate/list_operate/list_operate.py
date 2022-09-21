@@ -105,7 +105,7 @@ if __name__ == '__main__':
     # l0 = duplicate_to_only(l,False)
     # print(l0)
 
-    ins_info = is_insert(l2, l1)
-    del_info = is_delete(l2, l1)
+    ins_info = is_insert(l1, l2)
+    del_info = is_delete(l1, l2)
     print('insert:', ins_info)
     print('delete:', del_info)
