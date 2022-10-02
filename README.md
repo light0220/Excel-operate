@@ -96,16 +96,25 @@
     + 参数 `file_path`为文件保存路径，不指定的情况下为覆盖原文件保存，指定后可以另存为新的路径（如果之前实例化 `ExcelOperate`对象时没有指定 `file_path`，即创建空白Excel文件的情况下，保存时不指定路径的话则会报错。）
 + 其它功能：
 
-  + 列表去重：使用 `list_operate`模块下的 `duplicate_to_only(l, remove=False)`方法可以将传入的列表去重，并返回一个新列表。
+  + 列表去重：使用 `list_operate`模块下的 `duplicate_to_only(l, remove=False)`函数可以将传入的列表去重，并返回一个新列表。
     + 参数 `l`为传入的列表。
     + 参数 `remove`可传入布尔值类型数据，默认为 `False`即以重命名的方式去重，如果传入 `True`则会将列表中第二个及之后出现的重复元素直接删除。
   + 列表比较：
-    + 使用 `list_operate`模块下的 `is_insert(srcl, tagl)`可以判断目标列表是否为原列表插入元素所得。如果判断为是则返回一个以插入位置索引为键，该索引位置插入的元素个数为值的一个字典；否则返回`None`。
-    + 使用 `list_operate`模块下的 `is_delete(srcl, tagl)`可以判断目标列表是否为原列表删除元素所得。如果判断为是则返回一个以删除位置索引为键，该索引位置删除的元素个数为值的一个字典；否则返回`None`。
-    + 使用 `list_operate`模块下的 `is_appand(srcl, tagl)`可以判断目标列表是否为原列表后添加元素所得。如果判断为是则返回添加的元素个数；否则返回`None`。
+    + 使用 `list_operate`模块下的 `is_insert(srcl, tagl)`可以判断目标列表是否为原列表插入元素所得。如果判断为是则返回一个以插入位置索引为键，该索引位置插入的元素个数为值的一个字典；否则返回 `None`。
+    + 使用 `list_operate`模块下的 `is_delete(srcl, tagl)`可以判断目标列表是否为原列表删除元素所得。如果判断为是则返回一个以删除位置索引为键，该索引位置删除的元素个数为值的一个字典；否则返回 `None`。
+    + 使用 `list_operate`模块下的 `is_appand(srcl, tagl)`可以判断目标列表是否为原列表后添加元素所得。如果判断为是则返回添加的元素个数；否则返回 `None`。
+  + 列表匹配：
+    + 使用 `list_operate`模块下的 `list_matching(list1, list2, occupy=None)`函数可以将传入两个列表通过插入占位元素 `occupy`的方式，将两个列表中的相同的元素按索引位置一一对应，并返回两个新列表。
+  + 列表元素替换：使用 `list_operate`模块下的 `list_replace(l, old, new)`函数可以将传入的列表中的某元素替换为另一个元素，并返回一个新列表。
+    + 参数 `l`为传入的列表。
+    + 参数 `old`为旧元素。
+    + 参数 `new`为替换后的新元素。
 
 ## 四、版本历史
 
++ V 2.1.1
+  + list_operate模块中新增列表匹配(list_matching)函数和列表元素替换(list_replace)函数。
+  + 重写sheet_comparison模块中compare函数中工作表行和列匹配相关的逻辑语句。
 + V 2.0.2
   + 修复部分BUG。
 + V 2.0.1
