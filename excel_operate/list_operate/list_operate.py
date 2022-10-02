@@ -106,14 +106,70 @@ def is_delete(srcl: list, tagl: list):
         return delete_info
 
 
+def list_matching(list1: list, list2: list, occupy=None):
+    '''---
+    ### 传入两个列表，通过插入占位元素，将两个列表中的相同的元素按索引位置一一对应，并返回两个新列表。
+    ---
+    + list1: 列表1
+    + list2: 列表2
+    + occupy: 占位元素
+    '''
+    l1 = list1[:]
+    l2 = list2[:]
+    idx = 0
+    while idx < min(len(l1), len(l2)):
+        if l1[idx] != l2[idx]:
+            for n in range(max(len(l1), len(l2)) - idx):
+                if idx + n < len(l1) and l1[idx + n] == l2[idx]:
+                    for _ in range(n):
+                        l2.insert(idx, occupy)
+                    idx += n
+                    break
+                if idx + n < len(l2) and l1[idx] == l2[idx + n]:
+                    for _ in range(n):
+                        l1.insert(idx, occupy)
+                    idx += n
+                    break
+        idx += 1
+
+    if len(l1) != len(l2):
+        if len(l1) > len(l2):
+            for _ in range(len(l1) - len(l2)):
+                l2.append(occupy)
+        else:
+            for _ in range(len(l2) - len(l1)):
+                l1.append(occupy)
+
+    return l1, l2
+
+
+def list_replace(l: list, old, new):
+    '''---
+    ### 将列表中的某元素替换为另一个元素，并返回一个新列表。
+    ---
+    + l: 原列表
+    + old: 旧元素
+    + new: 替换后的新元素
+    '''
+    tmp_l = []
+    for i in l:
+        if i == old:
+            tmp_l.append(new)
+        else:
+            tmp_l.append(i)
+    return tmp_l
+
+
 if __name__ == '__main__':
     l1 = [0, 1, 'x1', 'x2', 2, 3, 4, 5, 6, 7, 8, 9]
-    l2 = [0, 1, 2, 3, 4, 5, 6, 7, 'x1', 'x2', 8, 9]
+    l2 = [0, 1, 2, 3, 4, 5, 6, 7, 'x1', 'x2', 8, 9, 10, 11]
     # l = ['a', 'a', 'a', 'a', 'a', 'a', 'a', 'a', 'a']
     # l0 = duplicate_to_only(l,False)
     # print(l0)
-
-    ins_info = is_insert(l2, l1)
-    del_info = is_delete(l2, l1)
-    print('insert:', ins_info)
-    print('delete:', del_info)
+    l3, l4 = list_matching(l1, l2,'占位')
+    print(l3)
+    print(l4)
+    l3 = list_replace(l3, '占位', '空')
+    l4 = list_replace(l4, '占位', '空')
+    print(l3)
+    print(l4)

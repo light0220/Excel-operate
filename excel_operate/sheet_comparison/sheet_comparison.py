@@ -57,6 +57,24 @@ class SheetComparison:
         if style == 'gai':
             cell.font = Font(color='FF00FF')
 
+    def get_title_list(self):
+        src_title_list = [
+            i.value for i in self.src_excel.ws[self.src_title_row]]
+        cmp_title_list = [
+            i.value for i in self.cmp_excel.ws[self.cmp_title_row]]
+        src_title_list = list_replace(src_title_list, None, '空')
+        cmp_title_list = list_replace(cmp_title_list, None, '空')
+        return src_title_list, cmp_title_list
+
+    def get_key_list(self):
+        src_key_list = [i.value for idx, i in enumerate(
+            self.src_excel.ws[get_column_letter(self.src_key_col)], 1) if idx > self.src_title_row]
+        cmp_key_list = [i.value for idx, i in enumerate(
+            self.cmp_excel.ws[get_column_letter(self.cmp_key_col)], 1) if idx > self.cmp_title_row]
+        src_key_list = list_replace(src_key_list, None, '空')
+        cmp_key_list = list_replace(cmp_key_list, None, '空')
+        return src_key_list, cmp_key_list
+
     def compare(self):
         '''---
         ### 对比工作表：将原工作表及目标工作表的表头行和关键列设置好之后即可使用此方法对比工作表，并返回对比报告。
@@ -84,11 +102,9 @@ class SheetComparison:
                     1, self.cmp_key_col-self.src_key_col)
                 self.src_key_col = self.cmp_key_col
 
+        src_title_list, cmp_title_list = self.get_title_list()
+
         # 如果目标工作表的表头行与原工作表的表头行不相同
-        src_title_list = [
-            i.value for i in self.src_excel.ws[self.src_title_row]]
-        cmp_title_list = [
-            i.value for i in self.cmp_excel.ws[self.cmp_title_row]]
         if src_title_list != cmp_title_list:
             self.src_excel.insert_rows(1)
             self.src_title_row += 1
@@ -98,27 +114,15 @@ class SheetComparison:
                 src_title_list)  # 通过重命名的方式给列表去重。
             cmp_title_list = duplicate_to_only(
                 cmp_title_list)  # 通过重命名的方式给列表去重。
-            title_insert_info = is_insert(src_title_list, cmp_title_list)
-            title_delete_info = is_insert(cmp_title_list, src_title_list)
-            title_append_info = is_appand(src_title_list, cmp_title_list)
-            if title_insert_info != None:
-                n = 1
-                for i in title_insert_info:
-                    self.src_excel.insert_cols(i + n, title_insert_info[i])
-                    n += title_insert_info[i]
-                src_title_list
-            if title_delete_info != None:
-                n = 1
-                for i in title_delete_info:
-                    self.cmp_excel.insert_cols(i + n, title_delete_info[i])
-                    n += title_delete_info[i]
-            if title_append_info != None:
-                self.src_excel.insert_cols(
-                    self.src_excel.ws.max_column + 1, title_append_info)
-            src_title_list = [
-                i.value for i in self.src_excel.ws[self.src_title_row]]
-            cmp_title_list = [
-                i.value for i in self.cmp_excel.ws[self.cmp_title_row]]
+            src_title_list, cmp_title_list = list_matching(
+                src_title_list, cmp_title_list)  # 通过插入占位元素，将两列表相匹配。
+
+            for i in range(len(src_title_list)):
+                if src_title_list[i] == None:
+                    self.src_excel.insert_cols(i + 1)
+            for i in range(len(cmp_title_list)):
+                if cmp_title_list[i] == None:
+                    self.cmp_excel.insert_cols(i + 1)
             for idx, i, j in zip(range(len(src_title_list)), src_title_list, cmp_title_list):
                 if i == None:
                     self.src_excel.ws[1][idx].value = '临'
@@ -147,34 +151,20 @@ class SheetComparison:
                     for cell in col:
                         self.font_color(cell, 'zeng')
 
+        src_key_list, cmp_key_list = self.get_key_list()
         # 如果目标工作表的关键列与原工作表的关键列不相同
-        src_key_list = [i.value for idx, i in enumerate(
-            self.src_excel.ws[get_column_letter(self.src_key_col)], 1) if idx > self.src_title_row]
-        cmp_key_list = [i.value for idx, i in enumerate(
-            self.cmp_excel.ws[get_column_letter(self.cmp_key_col)], 1) if idx > self.cmp_title_row]
         if src_key_list != cmp_key_list:
             src_key_list = duplicate_to_only(src_key_list)  # 通过重命名的方式给列表去重。
             cmp_key_list = duplicate_to_only(cmp_key_list)  # 通过重命名的方式给列表去重。
-            insert_info = is_insert(src_key_list, cmp_key_list)
-            delete_info = is_insert(cmp_key_list, src_key_list)
-            append_info = is_appand(src_key_list, cmp_key_list)
-            if insert_info != None:
-                n = self.src_title_row + 1
-                for i in insert_info:
-                    self.src_excel.insert_rows(i + n, insert_info[i])
-                    n += insert_info[i]
-            if delete_info != None:
-                n = self.cmp_title_row + 1
-                for i in delete_info:
-                    self.cmp_excel.insert_rows(i + n, delete_info[i])
-                    n += delete_info[i]
-            if append_info != None:
-                self.src_excel.insert_rows(
-                    self.src_excel.ws.max_row + 1, append_info)
-            src_key_list = [i.value for idx, i in enumerate(
-                self.src_excel.ws[get_column_letter(self.src_key_col)], 1) if idx > self.src_title_row]
-            cmp_key_list = [i.value for idx, i in enumerate(
-                self.cmp_excel.ws[get_column_letter(self.cmp_key_col)], 1) if idx > self.cmp_title_row]
+            src_key_list, cmp_key_list = list_matching(
+                src_key_list, cmp_key_list)  # 通过插入占位元素，将两列表相匹配。
+
+            for i in range(len(src_key_list)):
+                if src_key_list[i] == None:
+                    self.src_excel.insert_rows(i + self.src_title_row + 1)
+            for i in range(len(cmp_key_list)):
+                if cmp_key_list[i] == None:
+                    self.cmp_excel.insert_rows(i + self.cmp_title_row + 1)
             # print(src_key_list)
             # print(cmp_key_list)
             # 处理在同一位置删除行同时又插入行可能导致出现的空行问题
