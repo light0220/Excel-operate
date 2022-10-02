@@ -119,17 +119,22 @@ def list_matching(list1: list, list2: list, occupy=None):
     idx = 0
     while idx < min(len(l1), len(l2)):
         if l1[idx] != l2[idx]:
-            for n in range(max(len(l1), len(l2)) - idx):
-                if idx + n < len(l1) and l1[idx + n] == l2[idx]:
-                    for _ in range(n):
-                        l2.insert(idx, occupy)
-                    idx += n
-                    break
-                if idx + n < len(l2) and l1[idx] == l2[idx + n]:
-                    for _ in range(n):
-                        l1.insert(idx, occupy)
-                    idx += n
-                    break
+            if l1[idx] not in l2 and l2[idx] not in l1:
+                l1.insert(idx, occupy)
+                l2.insert(idx + 1, occupy)
+                idx += 1
+            else:
+                for n in range(max(len(l1), len(l2)) - idx):
+                    if idx + n < len(l1) and l1[idx + n] == l2[idx]:
+                        for _ in range(n):
+                            l2.insert(idx, occupy)
+                        idx += n
+                        break
+                    if idx + n < len(l2) and l1[idx] == l2[idx + n]:
+                        for _ in range(n):
+                            l1.insert(idx, occupy)
+                        idx += n
+                        break
         idx += 1
 
     if len(l1) != len(l2):
@@ -166,7 +171,7 @@ if __name__ == '__main__':
     # l = ['a', 'a', 'a', 'a', 'a', 'a', 'a', 'a', 'a']
     # l0 = duplicate_to_only(l,False)
     # print(l0)
-    l3, l4 = list_matching(l1, l2,'占位')
+    l3, l4 = list_matching(l1, l2, '占位')
     print(l3)
     print(l4)
     l3 = list_replace(l3, '占位', '空')
