@@ -26,18 +26,19 @@
   + 在需要导入本模块的代码中写入导入语句：`from excel_operate import ExcelOperate`。
 + 对象实例化方法：
 
-  + 通过语句 `excel = ExcelOperate(file_path=None,sheet_name=None)`，获得一个名为 `excel`的对象。
-    + 参数 `file_path`*为文件路径，指定后打开文件路径对应的Excel文件（相当于* `openpyxl`*中的* `load_workbook`*方法）不指定则会新建一个空白Excel文件（相当于* `openpyxl`*中的* `Workbook`*类的实例化）；*
-    + *参数* `sheet_name`*为工作表名，指定后打开对应的工作表(如果打开的工作薄中不存在指定名称的工作表则以指定的工作表为名创建一个工作表)，不指定则打开当前激活的工作表（相当于工作薄对象的* `active`*方法）。*
+  + 通过语句 `excel = ExcelOperate(file_path=None,sheet_name=None，data_only=False)`，获得一个名为 `excel`的对象。
+    + 参数 `file_path` 为文件路径，指定后打开文件路径对应的Excel文件（相当于 `openpyxl`中的 `load_workbook`方法）不指定则会新建一个空白Excel文件（相当于 `openpyxl`中的 `Workbook`类的实例化）；
+    + 参数 `sheet_name` 为工作表名，指定后打开对应的工作表(如果打开的工作薄中不存在指定名称的工作表则以指定的工作表为名创建一个工作表)，不指定则打开当前激活的工作表（相当于工作薄对象的 `active`方法）。
+    + 参数 `data_only` 在打开已有工作表时指定此参数，默认为False，如果为True则打开的工作表会将所有公式替换为实际数据
 + 插入或删除行（列）：
 
   + 插入行 `excel.insert_rows(idx,amount=1,height='before')`；
   + 删除行 `excel.delete_rows(idx,amount=1)`；
   + 插入列 `excel.insert_cols(idx,amount=1,width='before')`；
   + 删除列 `excel.delete_cols(idx,amount=1)`。
-    + 参数 `idx`为插入或删除的起始行（列）
-    + 参数 `amount`为插入或删除的行（列）数，不指定的情况下默认插入或删除1行（列）
-    + 参数 `height`和 `width`仅在插入行和列时使用，可指定为整数或者浮点数来设置插入的行高或列宽，不指定的情况下默认参数为 `'before'`，该参数可以让插入的行或列继承插入前上一行（列）的行高或列宽。另外插入行时，`height`参数也可指定为 `None`，此参数可以设置插入行的行高为自动行高。
+    + 参数 `idx` 为插入或删除的起始行（列）
+    + 参数 `amount` 为插入或删除的行（列）数，不指定的情况下默认插入或删除1行（列）
+    + 参数 `height` 和 `width` 仅在插入行和列时使用，可指定为整数或者浮点数来设置插入的行高或列宽，不指定的情况下默认参数为 `before`，该参数可以让插入的行或列继承插入前上一行（列）的行高或列宽。另外插入行时，`height` 参数也可指定为 `None`，此参数可以设置插入行的行高为自动行高。
 + 工作表复制：
 
   + 首先通过语句 `from excel_operate import SheetCopy`导入模块。
@@ -88,11 +89,11 @@
     ```
 + 其它 `openpyxl`操作：
 
-  + 使用 `wb = excel.wb`可以*获得 `openpyxl`中的工作薄对象 `wb`，从而进行* `openpyxl`中关于工作薄对象的一切操作；
-  + 使用 `ws = excel.ws`*可以获得 `openpyxl`中的工作表对象 `ws，`从而进行* `openpyxl`中关于工作表对象的一切操作。
+  + 使用 `wb = excel.wb`可以获得 `openpyxl`中的工作薄对象 `wb`，从而进行 `openpyxl`中关于工作薄对象的一切操作；
+  + 使用 `ws = excel.ws`可以获得 `openpyxl`中的工作表对象 `ws，`从而进行 `openpyxl`中关于工作表对象的一切操作。
 + Excel文件的保存：
 
-  + 可直接使用 `excel.save（file_path=None）`*的方法来保存。*
+  + 可直接使用 `excel.save（file_path=None）`的方法来保存。
     + 参数 `file_path`为文件保存路径，不指定的情况下为覆盖原文件保存，指定后可以另存为新的路径（如果之前实例化 `ExcelOperate`对象时没有指定 `file_path`，即创建空白Excel文件的情况下，保存时不指定路径的话则会报错。）
 + 其它功能：
 
@@ -112,6 +113,9 @@
 
 ## 四、版本历史
 
++ V 2.1.2
+  + ExcelOperate类新增data_only参数，作用同openpyxl中load_workbook的data_only参数。
+  + 删除部分冗余代码。
 + V 2.1.1
   + list_operate模块中新增列表匹配(list_matching)函数和列表元素替换(list_replace)函数。
   + 重写sheet_comparison模块中compare函数中工作表行和列匹配相关的逻辑语句。

@@ -11,18 +11,19 @@ from openpyxl.utils import get_column_letter
 
 
 class ExcelOperate:
-    def __init__(self, file_path: str = None, sheet_name: str = None):
+    def __init__(self, file_path: str = None, sheet_name: str = None, data_only=False):
         '''---
         ### 实例化Excel对象
         ---
         + file_path: 指定目标Excel文件路径，不指定的话则默认打开新建工作薄
         + sheet_name: 指定目标工作表名称，不指定的话默认为当前激活工作表，如果当前工作薄中不含有指定的工作表则会新建对应名称的工作表
+        + data_only: 打开已有工作表时指定此参数，如果为True则打开的工作表会将所有链接替换为实际数据
         '''
         self.file_path = file_path
         if file_path == None:
             self.wb = Workbook()
         else:
-            self.wb = load_workbook(file_path)
+            self.wb = load_workbook(file_path, data_only=data_only)
 
         if sheet_name == None:
             self.ws = self.wb.active
